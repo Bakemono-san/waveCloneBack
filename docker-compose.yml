@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: springschoolapp
+      POSTGRES_USER: bakemono
+      POSTGRES_PASSWORD: bakemono
+    ports:
+      - "5434:5432" # Corrected port mapping (5432 is the default PostgreSQL port)
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    image: waveclone-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ep-delicate-forest-a5pp7vcy.us-east-2.aws.neon.tech/neondb?user=neondb_owner&password=7rIhoRZuE3cp&sslmode=require
+      SPRING_DATASOURCE_USERNAME: bakemono
+      SPRING_DATASOURCE_PASSWORD: bakemono
+
+volumes:
+  pgdata: {}
